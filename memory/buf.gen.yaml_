@@ -1,0 +1,8 @@
+version: v2
+plugins:
+  - protoc_builtin: python
+    out: ./
+  - remote: buf.build/grpc/python:v1.72.0
+    out: ./
+  - protoc_builtin: pyi
+    out: ./

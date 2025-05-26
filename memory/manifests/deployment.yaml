@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memory-grpc
+  labels:
+    app: memory-grpc
+spec:
+  selector:
+    matchLabels:
+      app: memory-grpc
+  template:
+    metadata:
+      labels:
+        app: memory-grpc
+    spec:
+      containers:
+        - name: memory-grpc
+          image: memory
+          ports:
+            - containerPort: 50051
+          envFrom:
+            - configMapRef:
+                name: memory-config

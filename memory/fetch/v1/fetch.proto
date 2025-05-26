@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package fetch.v1;
+
+import "google/protobuf/timestamp.proto";
+import "graph/v1/graph.proto";
+
+message SearchRequest {
+  repeated string group_id = 1;
+  string query = 2;
+  string central_node = 3;
+  int32 limit = 4;
+  Filters filters = 5;
+}
+
+message Filters {
+  repeated string node_labels = 1;
+  repeated DateFilterGroups valid_at = 2;
+  repeated DateFilterGroups invalid_at = 3;
+  repeated DateFilterGroups created_at = 4;
+  repeated DateFilterGroups expired_at = 5;
+}
+
+message DateFilterGroups {
+  repeated DateFilter filters = 1;
+}
+
+message DateFilter {
+  google.protobuf.Timestamp date = 1; // ISO 8601 format
+  string comparison_operator = 2; // e.g., '=', '<>', '>', '<', '>=', '<='
+}
+
+message SearchResponse {
+  string group_id = 1;
+  repeated graph.v1.Edge results = 2;
+}
+
+service FetchService {
+  rpc Search(SearchRequest) returns (SearchResponse) {}
+}

@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package ingest.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "graph/v1/graph.proto";
+import "ingest/v1/jsonschema.proto";
+
+enum RecordsRole {
+  RECORDS_ROLE_UNSPECIFIED = 0;
+  RECORDS_ROLE_USER = 1;
+  RECORDS_ROLE_ASSISTANT = 2;
+  RECORDS_ROLE_SYSTEM = 3;
+}
+
+enum RecordsSourceType {
+  RECORDS_SOURCE_TYPE_UNSPECIFIED = 0;
+  RECORDS_SOURCE_TYPE_MESSAGE = 1;
+  RECORDS_SOURCE_TYPE_JSON = 2;
+  RECORDS_SOURCE_TYPE_TEXT = 3;
+}
+
+message IngestRequest {
+  repeated Record records = 1;
+  string group_id = 2;
+}
+
+message Record {
+  string uuid = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string data = 3;
+  string source_description = 4;
+  bool community_update = 5;
+  repeated string previous = 6;
+  string name = 7;
+  RecordsSourceType source_type = 8;
+  Identity identity = 9;
+  repeated string entities = 10;
+}
+
+message Identity {
+  string name = 1;
+  RecordsRole role = 2;
+}
+
+message IngestResponse {
+  string group_id = 2;
+  repeated graph.v1.Episode episodes = 1;
+}
+
+message Entity {
+  string id = 2;
+  string name = 4;
+  string description = 5;
+  repeated string tags = 6;
+  google.protobuf.Timestamp valid_at = 7;
+  JSONSchema schema = 8;
+}
+
+message AddEntityRequest {
+  string group_id = 1;
+  Entity entity = 2;
+}
+
+message AddEntityResponse {
+  string id = 1;
+}
+
+message GetEntityRequest {
+  string group_id = 1;
+  string id = 2;
+  string schema_id = 3;
+}
+
+message GetEntityResponse {
+  Entity entity = 1;
+}
+
+message UpdateEntityRequest {
+  string group_id = 1;
+  Entity entity = 2;
+}
+
+message DeleteEntityRequest {
+  string group_id = 1;
+  oneof entity {
+    string id = 2;
+    string schema_id = 3;
+  }
+}
+
+service IngestService {
+  rpc Ingest(IngestRequest) returns (IngestResponse);
+  rpc AddEntity(AddEntityRequest) returns (AddEntityResponse);
+  rpc GetEntity(GetEntityRequest) returns (GetEntityResponse);
+  rpc UpdateEntity(UpdateEntityRequest) returns (google.protobuf.Empty);
+  rpc DeleteEntity(DeleteEntityRequest) returns (google.protobuf.Empty);
+}

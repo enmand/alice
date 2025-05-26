@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package ingest.v1;
+
+import "google/protobuf/struct.proto";
+
+message JSONSchema {
+  // Basic metadata
+  string schema = 36;
+  string id = 37;
+  string title = 1;
+  string description = 2;
+  google.protobuf.Value default = 3; // Using google.protobuf.Value for flexibility
+  repeated google.protobuf.Value examples = 4;
+
+  // Type definitions
+  repeated string type = 5;
+
+  // Object-specific keywords
+  map<string, JSONSchema> properties = 6;
+  repeated string required = 7;
+  google.protobuf.Value additional_properties = 8; // Can be a boolean or a JSONSchema
+  int32 min_properties = 9;
+  int32 max_properties = 10;
+  map<string, JSONSchema> pattern_properties = 11;
+  map<string, google.protobuf.Value> dependencies = 12; // Can be a list of strings or a JSONSchema
+
+  // Array-specific keywords
+  google.protobuf.Value items = 13; // Can be a JSONSchema or a list of JSONSchemas
+  google.protobuf.Value additional_items = 14; // Can be a boolean or a JSONSchema
+  int32 min_items = 15;
+  int32 max_items = 16;
+  bool unique_items = 17;
+
+  // String-specific keywords
+  int32 min_length = 18;
+  int32 max_length = 19;
+  string pattern = 20;
+  string format = 21;
+
+  // Number-specific keywords
+  double minimum = 22;
+  double maximum = 23;
+  double exclusive_minimum = 24;
+  double exclusive_maximum = 25;
+  double multiple_of = 26;
+
+  // Enum and const
+  repeated google.protobuf.Value enum = 27;
+  google.protobuf.Value const = 28;
+
+  // Conditionals
+  JSONSchema if = 29; // 'if' is a reserved word in Protobuf
+  JSONSchema then = 30;
+  JSONSchema else = 31; // 'else' is a reserved word in Protobuf
+
+  // Combination keywords
+  repeated JSONSchema all_of = 32;
+  repeated JSONSchema any_of = 33;
+  repeated JSONSchema one_of = 34;
+  JSONSchema not = 35; // 'not' is a reserved word in Protobuf
+}

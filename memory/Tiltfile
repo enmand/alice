@@ -1,0 +1,43 @@
+docker_build('memory', '.', dockerfile="Dockerfile.dev")
+
+load("ext://configmap", "configmap_create")
+configmap_create(
+    name = "memory-config",
+    from_env_file = ".env",
+    watch = True,
+)
+
+k8s_yaml('manifests/deployment.yaml')
+k8s_resource('memory-grpc', port_forwards=50051, labels=["memory"])
+
+load("ext://namespace", "namespace_create")
+# Load the NATS Helm chart and set up the namespace
+namespace_create("db")
+
+load("ext://helm_remote", "helm_remote")
+
+helm_remote(
+    chart = "neo4j",
+    repo_url = "https://helm.neo4j.com/neo4j",
+    set = [
+        "neo4j.name=memory",
+        "core.standalone=true",
+        "acceptLicenseAgreement=yes",
+        "neo4j.password=notneo4j",
+        "volumes.data.mode=dynamic",
+        "volumes.data.dynamic.storageClassName=local-path",
+    ],
+    namespace="db",
+)
+
+helm_remote(
+    chart = "postgresql",
+    repo_url = "oci://registry-1.docker.io/bitnamicharts",
+    set = [
+        "global.storageClass=local-path",
+        "auth.username=postgres",
+        "auth.password=notpostgres",
+        "auth.database=memory",
+    ],
+    namespace="db",
+)

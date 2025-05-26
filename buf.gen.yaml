@@ -1,0 +1,8 @@
+version: v2
+plugins:
+  - protoc_builtin: python
+    out: ./memory/
+  - remote: buf.build/grpc/python:v1.72.0
+    out: ./memory/
+  - protoc_builtin: pyi
+    out: ./memory/

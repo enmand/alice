@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package graph.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Episode {
+  string uuid = 1;
+  google.protobuf.Timestamp valid_at = 2;
+  repeated Node nodes = 3;
+  repeated Edge edges = 4;
+}
+
+message Node {
+  string uuid = 1;
+  string summary = 2;
+}
+
+message Edge {
+  string uuid = 1;
+  string fact = 2;
+  string name = 3;
+  repeated string episodes = 4;
+  google.protobuf.Timestamp expired_at = 5;
+  google.protobuf.Timestamp invalid_at = 6;
+  google.protobuf.Timestamp valid_at = 7;
+}

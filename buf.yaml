@@ -1,0 +1,18 @@
+version: v2
+modules:
+  - path: ./memory/
+    excludes:
+      - ./memory/.venv/
+deps:
+  - buf.build/googleapis/googleapis
+lint:
+  use:
+    - STANDARD
+  ignore_only:
+    RPC_RESPONSE_STANDARD_NAME:
+      - ingest/v1/ingest.proto
+    RPC_REQUEST_RESPONSE_UNIQUE:
+      - ingest/v1/ingest.proto
+breaking:
+  use:
+    - FILE
