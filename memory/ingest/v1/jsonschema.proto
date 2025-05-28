@@ -4,6 +4,8 @@ package ingest.v1;
 
 import "google/protobuf/struct.proto";
 
+option go_package = "github.com/enmand/alice/generated/ingest/v1;ingestv1";
+
 message JSONSchema {
   // Basic metadata
   string schema = 36;

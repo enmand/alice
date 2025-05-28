@@ -7,6 +7,8 @@ import "google/protobuf/timestamp.proto";
 import "graph/v1/graph.proto";
 import "ingest/v1/jsonschema.proto";
 
+option go_package = "github.com/enmand/alice/generated/ingest/v1;ingestv1";
+
 enum RecordsRole {
   RECORDS_ROLE_UNSPECIFIED = 0;
   RECORDS_ROLE_USER = 1;

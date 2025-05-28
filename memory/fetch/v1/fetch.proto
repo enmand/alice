@@ -5,6 +5,8 @@ package fetch.v1;
 import "google/protobuf/timestamp.proto";
 import "graph/v1/graph.proto";
 
+option go_package = "github.com/enmand/alice/generated/fetch/v1;fetchv1";
+
 message SearchRequest {
   repeated string group_id = 1;
   string query = 2;

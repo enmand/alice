@@ -4,6 +4,8 @@ package graph.v1;
 
 import "google/protobuf/timestamp.proto";
 
+option go_package = "github.com/enmand/alice/generated/graph/v1;graphv1";
+
 message Episode {
   string uuid = 1;
   google.protobuf.Timestamp valid_at = 2;
