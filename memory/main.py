@@ -15,7 +15,7 @@ from ingest.v1 import ingest_pb2_grpc
 
 
 async def main():
-    config = Config()  # pyright:ignore[reportCallIssue]
+    config = Config()
 
     graphiti = graphiti_core.Graphiti(
         config.neo4j.uri,
